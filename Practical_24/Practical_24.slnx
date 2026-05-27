@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Practical_24.API/Practical_24.API.csproj" />
+  <Project Path="Practical_24.Application/Practical_24.Application.csproj" />
+  <Project Path="Practical_24.Domain/Practical_24.Domain.csproj" />
+  <Project Path="Practical_24.Infrastructure/Practical_24.Infrastructure.csproj" />
+</Solution>
