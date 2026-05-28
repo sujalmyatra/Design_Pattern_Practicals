@@ -11,14 +11,12 @@ namespace Practical_22.Application.Services
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
         private readonly ILoggerService _logger;
-        private readonly IEmployeeRepository _repository;
 
-        public EmployeeService(IUnitOfWork uow, IMapper mapper, IEmployeeRepository repository, ILoggerService logger)
+        public EmployeeService(IUnitOfWork uow, IMapper mapper, ILoggerService logger)
         {
             _uow = uow;
             _mapper = mapper;
             _logger = logger;
-            _repository = repository;
         }
 
         public async Task<EmployeeResponseDto> CreateEmployeeAsync(CreateEmployeeDto dto)
@@ -27,7 +25,7 @@ namespace Practical_22.Application.Services
 
             var employee = _mapper.Map<Employee>(dto);
 
-            await _repository.AddAsync(employee);
+            await _uow.Employees.AddAsync(employee);
 
             await _uow.SaveChangesAsync();
 
@@ -40,7 +38,7 @@ namespace Practical_22.Application.Services
         {
             _logger.Log($"Update Employee Started : {dto.Id}");
 
-            var employee = await _repository.GetByIdAsync(dto.Id);
+            var employee = await _uow.Employees.GetByIdAsync(dto.Id);
 
             if(employee == null)
             {
@@ -51,7 +49,7 @@ namespace Practical_22.Application.Services
 
             _mapper.Map(dto, employee);
 
-            _repository.Update(employee);
+            _uow.Employees.Update(employee);
 
             await _uow.SaveChangesAsync();
 
@@ -64,7 +62,7 @@ namespace Practical_22.Application.Services
         {
             _logger.Log($"Delete Employee Started : {id}");
 
-            var employee = await _repository.GetByIdAsync(id);
+            var employee = await _uow.Employees.GetByIdAsync(id);
 
             if (employee == null)
             {
@@ -75,7 +73,7 @@ namespace Practical_22.Application.Services
 
             employee.status = false;
 
-            _repository.Update(employee);
+            _uow.Employees.Update(employee);
 
             await _uow.SaveChangesAsync();
 
@@ -92,7 +90,7 @@ namespace Practical_22.Application.Services
             {
                 _logger.Log($"Fetching Employee By Id : {id}");
 
-                var employee = await _repository.GetByIdAsync(id.Value);
+                var employee = await _uow.Employees.GetByIdAsync(id.Value);
 
                 if(employee == null)
                 {
@@ -111,7 +109,7 @@ namespace Practical_22.Application.Services
 
             _logger.Log("Fetching All Employees");
 
-            var employees = await _repository.GetAllAsync();
+            var employees = await _uow.Employees.GetAllAsync();
 
             _logger.Log($"Total Employees Found : {employees.Count()}");
 

@@ -10,13 +10,12 @@ public class EmployeeService(IUnitOfWork uow, IMapper mapper, IEmployeeRepositor
 {
     private readonly IUnitOfWork _uow = uow;
     private readonly IMapper _mapper = mapper;
-    private readonly IEmployeeRepository _repository = repository;
 
     public async Task<EmployeeResponseDto> CreateEmployeeAsync(CreateEmployeeDto dto)
     {
         var employee = _mapper.Map<Employee>(dto);
 
-        await _repository.AddAsync(employee);
+        await _uow.Employees.AddAsync(employee);
 
         await _uow.SaveChangesAsync();
 
@@ -25,7 +24,7 @@ public class EmployeeService(IUnitOfWork uow, IMapper mapper, IEmployeeRepositor
 
     public async Task<EmployeeResponseDto> UpdateEmployeeAsync(UpdateEmployeeDto dto)
     {
-        var employee = await _repository.GetByIdAsync(dto.Id);
+        var employee = await _uow.Employees.GetByIdAsync(dto.Id);
 
         if(employee == null)
         {
@@ -34,7 +33,7 @@ public class EmployeeService(IUnitOfWork uow, IMapper mapper, IEmployeeRepositor
 
         _mapper.Map(dto, employee);
 
-        _repository.Update(employee);
+        _uow.Employees.Update(employee);
 
         await _uow.SaveChangesAsync();
 
@@ -43,14 +42,14 @@ public class EmployeeService(IUnitOfWork uow, IMapper mapper, IEmployeeRepositor
 
     public async Task<bool> DeleteEmployeeAsync(Guid id)
     {
-        var employee = await _repository.GetByIdAsync(id);
+        var employee = await _uow.Employees.GetByIdAsync(id);
 
         if(employee == null)
             return false;
         
         employee.status = false;
 
-        _repository.Update(employee);
+        _uow.Employees.Update(employee);
 
         await _uow.SaveChangesAsync();
 
@@ -61,7 +60,7 @@ public class EmployeeService(IUnitOfWork uow, IMapper mapper, IEmployeeRepositor
     {
         if(id.HasValue)
         {
-            var employee = await _repository.GetByIdAsync(id.Value);
+            var employee = await _uow.Employees.GetByIdAsync(id.Value);
 
             if(employee == null)
             {
@@ -74,7 +73,7 @@ public class EmployeeService(IUnitOfWork uow, IMapper mapper, IEmployeeRepositor
             };
         }
 
-        var employees = await _repository.GetAllAsync();
+        var employees = await _uow.Employees.GetAllAsync();
 
         return _mapper.Map<IEnumerable<EmployeeResponseDto>>(employees);
     }
