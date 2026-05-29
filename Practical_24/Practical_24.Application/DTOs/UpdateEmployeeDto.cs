@@ -1,17 +1,14 @@
-﻿
+﻿namespace Practical_24.Application.DTOs;
 
-namespace Practical_24.Application.DTOs
+public class UpdateEmployeeDto
 {
-    public class UpdateEmployeeDto
-    {
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        public string Name { get; set; } = String.Empty;
+    public string Name { get; set; } = String.Empty;
 
-        public decimal Salary { get; set; }
+    public decimal Salary { get; set; }
 
-        public int DepartmentId { get; set; }
-        public string EmailId { get; set; } = String.Empty;
+    public int DepartmentId { get; set; }
+    public string EmailId { get; set; } = String.Empty;
 
-    }
 }

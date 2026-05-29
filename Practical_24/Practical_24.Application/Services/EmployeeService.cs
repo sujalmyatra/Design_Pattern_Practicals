@@ -6,7 +6,7 @@ using AutoMapper;
 
 namespace Practical_24.Application.Services;
 
-public class EmployeeService(IUnitOfWork uow, IMapper mapper, IEmployeeRepository repository) : IEmployeeService
+public class EmployeeService(IUnitOfWork uow, IMapper mapper) : IEmployeeService
 {
     private readonly IUnitOfWork _uow = uow;
     private readonly IMapper _mapper = mapper;

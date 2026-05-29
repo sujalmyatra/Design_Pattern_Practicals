@@ -2,52 +2,51 @@ using Practical_24.Application.DTOs;
 using Practical_24.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Practical_24.API.Controllers
+namespace Practical_24.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class EmployeesController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class EmployeesController : ControllerBase
+    private readonly IEmployeeService _service;
+
+    public EmployeesController(IEmployeeService service)
     {
-        private readonly IEmployeeService _service;
+        _service = service;
+    }
 
-        public EmployeesController(IEmployeeService service)
-        {
-            _service = service;
-        }
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateEmployeeDto dto)
+    {
+        var result = await _service.CreateEmployeeAsync(dto);
 
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateEmployeeDto dto)
-        {
-            var result = await _service.CreateEmployeeAsync(dto);
+        return Ok(result);
+    }
 
-            return Ok(result);
-        }
+    [HttpPut]
+    public async Task<IActionResult> Update(UpdateEmployeeDto dto)
+    {
+        var result = await _service.UpdateEmployeeAsync(dto);
 
-        [HttpPut]
-        public async Task<IActionResult> Update(UpdateEmployeeDto dto)
-        {
-            var result = await _service.UpdateEmployeeAsync(dto);
+        return Ok(result);
+    }
 
-            return Ok(result);
-        }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var result = await _service.DeleteEmployeeAsync(id);
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var result = await _service.DeleteEmployeeAsync(id);
+        if(!result)
+            return NotFound();
+        
+        return Ok("Employee Deactivated");
+    }
 
-            if(!result)
-                return NotFound();
-            
-            return Ok("Employee Deactivated");
-        }
+    [HttpGet]
+    public async Task<IActionResult> Get(Guid? id)
+    {
+        var result = await _service.GetEmployeesAsync(id);
 
-        [HttpGet]
-        public async Task<IActionResult> Get(Guid? id)
-        {
-            var result = await _service.GetEmployeesAsync(id);
-
-            return Ok(result);
-        }
+        return Ok(result);
     }
 }

@@ -2,11 +2,10 @@
 using Practical_24.Domain.Interfaces;
 using Practical_24.Infrastructure.Data;
 
-namespace Practical_24.Infrastructure.Repositories
+namespace Practical_24.Infrastructure.Repositories;
+
+public class EmployeeRepository : GenericRepository<Employee>
 {
-    public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
-    {
-        public EmployeeRepository(AppDbContext context) : base(context)
-        { }
-    }
+    public EmployeeRepository(AppDbContext context) : base(context)
+    { }
 }

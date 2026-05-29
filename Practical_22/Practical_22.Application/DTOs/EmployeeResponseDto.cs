@@ -1,5 +1,4 @@
-﻿
-namespace Practical_22.Application.DTOs
+﻿namespace Practical_22.Application.DTOs
 {
     public class EmployeeResponseDto
     {

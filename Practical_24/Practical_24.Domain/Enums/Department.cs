@@ -1,12 +1,11 @@
 ﻿
-namespace Practical_24.Domain.Enums
+namespace Practical_24.Domain.Enums;
+
+public enum Department
 {
-    public enum Department
-    {
-        IT = 1,
-        Admin = 2,
-        HR = 3,
-        Sales = 4,
-        OnSite = 5
-    }
+    IT = 1,
+    Admin = 2,
+    HR = 3,
+    Sales = 4,
+    OnSite = 5
 }

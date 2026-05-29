@@ -4,39 +4,38 @@ using Practical_26.Application.Interfaces;
 using Practical_26.Domain.Interfaces;
 
 
-namespace Practical_26.Application.Services
+namespace Practical_26.Application.Services;
+
+public class EmployeeQueryService : IEmployeeQueryService
 {
-    public class EmployeeQueryService : IEmployeeQueryService
+    private readonly IUnitOfWork _uow;
+    private readonly IMapper _mapper;
+
+    public EmployeeQueryService(IUnitOfWork uow, IMapper mapper)
     {
-        private readonly IUnitOfWork _uow;
-        private readonly IMapper _mapper;
+        _uow = uow;
+        _mapper = mapper;
+    }
 
-        public EmployeeQueryService(IUnitOfWork uow, IMapper mapper)
+    public async Task<IEnumerable<EmployeeResponseDto>> GetEmployeesAsync(Guid? id)
+    {
+        if (id.HasValue)
         {
-            _uow = uow;
-            _mapper = mapper;
-        }
+            var employee = await _uow.EmployeeQuery.GetByIdAsync(id.Value);
 
-        public async Task<IEnumerable<EmployeeResponseDto>> GetEmployeesAsync(Guid? id)
-        {
-            if (id.HasValue)
+            if(employee == null)
             {
-                var employee = await _uow.EmployeeQuery.GetByIdAsync(id.Value);
-
-                if(employee == null)
-                {
-                    return new List<EmployeeResponseDto>();
-                }
-
-                return new List<EmployeeResponseDto>
-                {
-                    _mapper.Map<EmployeeResponseDto>(employee)
-                };
+                return new List<EmployeeResponseDto>();
             }
 
-            var employees = await _uow.EmployeeQuery.GetAllAsync();
-
-            return _mapper.Map<IEnumerable<EmployeeResponseDto>>(employees);
+            return new List<EmployeeResponseDto>
+            {
+                _mapper.Map<EmployeeResponseDto>(employee)
+            };
         }
+
+        var employees = await _uow.EmployeeQuery.GetAllAsync();
+
+        return _mapper.Map<IEnumerable<EmployeeResponseDto>>(employees);
     }
 }

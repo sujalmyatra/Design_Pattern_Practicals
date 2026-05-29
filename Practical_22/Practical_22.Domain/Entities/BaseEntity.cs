@@ -1,8 +1,7 @@
-﻿namespace Practical_22.Domain.Entities
+﻿namespace Practical_22.Domain.Entities;
+
+public class BaseEntity
 {
-    public class BaseEntity
-    {
-        public Guid Id { get; set; }
-        public bool status { get; set; } = true;
-    }
+    public Guid Id { get; set; }
+    public bool status { get; set; } = true;
 }

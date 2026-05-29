@@ -1,7 +1,6 @@
-﻿namespace Practical_22.Domain.Interfaces
+﻿namespace Practical_22.Domain.Interfaces;
+
+public interface ILoggerService
 {
-    public interface ILoggerService
-    {
-        void Log(string message);
-    }
+    void Log(string message);
 }

@@ -4,10 +4,9 @@ namespace Practical_23.Domain.Entities;
 
 public class Employee : BaseEntity
 {
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; }
     public decimal Salary { get; set; }
-    public Deparment DepartmentId { get; set; }
-    public string EmailId { get; set; } = string.Empty;
-    public DateTime Joiningdate { get; set; }
-
+    public Department DepartmentId { get; set; }
+    public string EmailId { get; set; }
+    public DateTime JoiningDate { get; set; } = DateTime.UtcNow;
 }

@@ -1,19 +1,13 @@
-﻿using Practical_26.Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Practical_26.Application.Command;
 
-namespace Practical_26.Application.Command
+public class UpdateEmployeeCommand
 {
-    public class UpdateEmployeeCommand
-    {
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        public string Name { get; set; } = String.Empty;
+    public string Name { get; set; } = String.Empty;
 
-        public decimal Salary { get; set; }
+    public decimal Salary { get; set; }
 
-        public int DepartmentId { get; set; }
-        public string EmailId { get; set; } = String.Empty;
-    }
+    public int DepartmentId { get; set; }
+    public string EmailId { get; set; } = String.Empty;
 }

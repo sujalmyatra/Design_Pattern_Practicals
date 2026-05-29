@@ -1,23 +1,22 @@
 ﻿using Practical_26.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Practical_26.Infrastructure.Data
+namespace Practical_26.Infrastructure.Data;
+
+public class AppDbContext : DbContext
 {
-    public class AppDbContext : DbContext
+    public AppDbContext(DbContextOptions<AppDbContext> options):base(options)
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options):base(options)
-        {
-        }
+    }
 
-        DbSet<Employee> Employees { get; set; }
+    DbSet<Employee> Employees { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Employee>().HasQueryFilter(e => e.Status);
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Employee>().HasQueryFilter(e => e.Status);
 
-            modelBuilder.Entity<Employee>().Property(e => e.Salary).HasPrecision(18, 2);
+        modelBuilder.Entity<Employee>().Property(e => e.Salary).HasPrecision(18, 2);
 
-            base.OnModelCreating(modelBuilder);
-        }
+        base.OnModelCreating(modelBuilder);
     }
 }

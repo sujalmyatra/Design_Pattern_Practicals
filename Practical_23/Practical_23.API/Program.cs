@@ -1,56 +1,79 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Practical_23.Application.Abstract_Factory;
+using Practical_23.Application.Abstract_Factory.Interfaces;
+using Practical_23.Application.Factories;
+using Practical_23.Application.Factories.Interfaces;
 using Practical_23.Application.Interfaces;
-using Practical_23.Application.Mapping;
-using Practical_23.Application.Service;
-using Practical_23.Application.Validator;
-using Practical_23.DAL.Data;
-using Practical_23.DAL.Repository;
+using Practical_23.Application.Mappings;
+using Practical_23.Application.Services;
+using Practical_23.Application.Validators;
+using Practical_23.Domain.Entities;
+using Practical_23.Domain.Interfaces;
+using Practical_23.Infrastructure.Data;
+using Practical_23.Infrastructure.Repositories;
 
-namespace Practical_23.API;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
-{
-    public static void Main(string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
 
-        builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateEmployeeDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateEmployeeDtoValidator>();
 
-        builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
-        builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApi();
 
-        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddSwaggerGen();
 
-        builder.Services.AddScoped<IEmpService, EmpService>();
+builder.Services.AddDbContext<AppDbContext>(options =>
 
-        builder.Services.AddAutoMapper(typeof(MapProfile).Assembly);
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-        builder.Services.AddValidatorsFromAssemblyContaining<CreateValidator>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
-        builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
 
-        builder.Services.AddSwaggerGen();
 
-        var app = builder.Build();
+builder.Services.AddScoped<IOverTimePayFactory, ITOverTimePayFactory>();
 
-        if (app.Environment.IsDevelopment())       
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+builder.Services.AddScoped<IOverTimePayFactory, HROverTimePayFactory>();
 
-        app.UseHttpsRedirection();
+builder.Services.AddScoped<IOverTimePayFactory, SalesOverTimePayFactory>();
 
-        app.UseAuthorization();
+builder.Services.AddScoped<IOverTimePayFactory, OnSiteOverTimePayFactory>();
 
-        app.MapControllers();
+builder.Services.AddScoped<IOverTimePayAbstractFactory, IndoorFactory>();
 
-        app.Run();
+builder.Services.AddScoped<IOverTimePayAbstractFactory, OutdoorFactory>();
 
-    }
-}
+builder.Services.AddScoped<AbstractFactoryProvider>();
+
+builder.Services.AddScoped<ITOverTimePayFactory>();
+
+builder.Services.AddScoped<HROverTimePayFactory>();
+
+builder.Services.AddScoped<SalesOverTimePayFactory>();
+
+builder.Services.AddScoped<OnSiteOverTimePayFactory>();
+
+
+var app = builder.Build();
+
+app.UseSwagger();
+
+app.UseSwaggerUI();
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();

@@ -23,4 +23,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Practical_23.Application\Practical_23.Application.csproj" />
+    <ProjectReference Include="..\Practical_23.Domain\Practical_23.Domain.csproj" />
+    <ProjectReference Include="..\Practical_23.Infrastructure\Practical_23.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
